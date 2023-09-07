@@ -107,14 +107,16 @@ def iteracoes(funcao_continua, intervalos):
         funcao = funcao_continua
         xk = retornoFuncao2(x0)
         xk_anterior = x0
+        print("------------------------------------------------------------------------------------")
+        print(f"Raiz encontrada no intervalo [{intervalo[0]}, {intervalo[1]}]: {raiz}")
+        print("Calculando convergência...")
         while abs(xk - xk_anterior) > epsilon:
-            if (cont >= 2):
                 convergencia = (xk - raiz) / (xk_anterior - raiz)
                 xk_anterior = xk
                 xk = retornoFuncao2(xk_anterior)
-            cont = cont + 1
-            #print(convergencia)
-        print(f"Raiz encontrada no intervalo [{intervalo[0]}, {intervalo[1]}]: {raiz}")
+                cont = cont + 1
+                print(convergencia)
+        print("------------------------------------------------------------------------------------")
 
 
 def verificaIntervalo():
