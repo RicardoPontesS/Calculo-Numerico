@@ -6,8 +6,15 @@ def retornoFuncao(x):
     return resultado
 
 def retornoFuncao2(x):
-    resultado = (2 * x**3 - 1)/6
-    return resultado
+    resultado = ((6 * x + 1) / 2)
+    if(resultado<0):
+        resultado = abs(resultado)
+        resultado = resultado ** (1/3)
+        resultado *= -1
+        return resultado
+    else:
+        resultado = ((6 * x + 1) / 2) **(1/3)
+        return resultado
 def verificaContinuidade(funcao, intervalo):
     x = sp.symbols('x')
 
@@ -28,13 +35,18 @@ def verificaContinuidade(funcao, intervalo):
         print(f"A função é contínua no intervalo [{intervalo[0]}, {intervalo[1]}].")
         return True
 
+
 def verificaDerivadaContinua(funcao, intervalos):
     x = sp.symbols('x')
+
+    # Calcula a derivada da função
     derivada = sp.diff(funcao, x)
     print(f"A derivada da G(X) é: {derivada}")
 
     for intervalo in intervalos:
         print(f"Calculando a continuidade da derivada para o intervalo: [{intervalo[0]},{intervalo[1]}]...")
+        continua = True  # Inicialmente, assumimos que a derivada é contínua no intervalo
+
         for ponto in np.linspace(float(intervalo[0]), float(intervalo[1]), 100):
             limite_esquerda = sp.limit(derivada, x, ponto, dir='-')
             limite_direita = sp.limit(derivada, x, ponto, dir='+')
@@ -42,9 +54,15 @@ def verificaDerivadaContinua(funcao, intervalos):
 
             if limite_esquerda != limite_direita != valor_ponto:
                 print(f"A derivada não é contínua em x = {ponto} no intervalo {intervalo}")
-                return False
+                continua = False  # A derivada não é contínua no intervalo
+                break  # Pode parar de verificar, pois já sabemos que não é contínua
 
-    return True
+        if continua:
+            print(f"A derivada é contínua no intervalo [{intervalo[0]},{intervalo[1]}].")
+        else:
+            print(f"A derivada não é contínua no intervalo [{intervalo[0]},{intervalo[1]}].")
+
+    return continua
 
 
 def verificaDerivadaMenorQueUm(derivada, intervalos):
@@ -56,7 +74,7 @@ def verificaDerivadaMenorQueUm(derivada, intervalos):
             valor_ponto = derivada.subs(x, ponto)
             if abs(valor_ponto) >= 1:
                 print(f"Derivada é maior ou igual a 1 em x = {ponto} no intervalo {intervalo}...")
-
+                break
     print("-------------------------------------------------------------")
     return True
 
@@ -155,7 +173,8 @@ def modificaFuncao():
     x = sp.symbols('x')
 
     equacoes_com_x_isolado = []
-    equacao1 = (2 * x ** 3 - 1) / 6
+    # x = sqrt((6x+1)/2)
+    equacao1 = ((6 * x + 1) / 2) ** (1 / 3)
     equacoes_com_x_isolado.append(equacao1)
 
     for eq in equacoes_com_x_isolado:
