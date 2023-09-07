@@ -10,21 +10,23 @@ def retornoFuncao2(x):
     return resultado
 def verificaContinuidade(funcao, intervalo):
     x = sp.symbols('x')
-    pontos = np.linspace(float(intervalo[0]), float(intervalo[1]), 100)
 
-    print(
-        f"Calculando os limites laterais para verificar a continuidade da função no intervalo [{intervalo[0]},{intervalo[1]}]...")
+    # Define a função simbólica
+    f = sp.sympify(funcao)
 
-    for ponto in pontos:
-        limite_esquerda = sp.limit(funcao, x, ponto, dir='-')
-        limite_direita = sp.limit(funcao, x, ponto, dir='+')
-        valor_ponto = funcao.subs(x, ponto)
+    # Verifica se o denominador da função é zero
+    denominador = f.as_numer_denom()[1]
+    pontos_criticos = sp.solve(denominador, x)
 
-        if limite_esquerda != limite_direita != valor_ponto:
-            print(f"A função não é contínua em x = {ponto}")
-            return False
+    # Verifica se os pontos críticos estão dentro do intervalo
+    pontos_dentro_do_intervalo = [p for p in pontos_criticos if intervalo[0] <= p <= intervalo[1]]
 
-    return True
+    if pontos_dentro_do_intervalo:
+        print(f"A função não é contínua nos seguintes pontos críticos: {pontos_dentro_do_intervalo}")
+        return False
+    else:
+        print(f"A função é contínua no intervalo [{intervalo[0]}, {intervalo[1]}].")
+        return True
 
 def verificaDerivadaContinua(funcao, intervalos):
     x = sp.symbols('x')
@@ -54,7 +56,7 @@ def verificaDerivadaMenorQueUm(derivada, intervalos):
             valor_ponto = derivada.subs(x, ponto)
             if abs(valor_ponto) >= 1:
                 print(f"Derivada é maior ou igual a 1 em x = {ponto} no intervalo {intervalo}...")
-
+                break
     print("-------------------------------------------------------------")
     return True
 
