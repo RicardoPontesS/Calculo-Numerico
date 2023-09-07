@@ -17,28 +17,36 @@ def retornoFuncao2(x):
         return resultado
 def verificaContinuidade(funcao, intervalo):
     x = sp.symbols('x')
-    pontos = np.linspace(float(intervalo[0]), float(intervalo[1]), 100)
 
-    print(
-        f"Calculando os limites laterais para verificar a continuidade da função no intervalo [{intervalo[0]},{intervalo[1]}]...")
+    # Define a função simbólica
+    f = sp.sympify(funcao)
 
-    for ponto in pontos:
-        limite_esquerda = sp.limit(funcao, x, ponto, dir='-')
-        limite_direita = sp.limit(funcao, x, ponto, dir='+')
-        valor_ponto = funcao.subs(x, ponto)
+    # Verifica se o denominador da função é zero
+    denominador = f.as_numer_denom()[1]
+    pontos_criticos = sp.solve(denominador, x)
 
-        if limite_esquerda != limite_direita != valor_ponto:
-            print(f"A função não é contínua em x = {ponto}")
-            return False
-    return True
+    # Verifica se os pontos críticos estão dentro do intervalo
+    pontos_dentro_do_intervalo = [p for p in pontos_criticos if intervalo[0] <= p <= intervalo[1]]
+
+    if pontos_dentro_do_intervalo:
+        print(f"A função não é contínua nos seguintes pontos críticos: {pontos_dentro_do_intervalo}")
+        return False
+    else:
+        print(f"A função é contínua no intervalo [{intervalo[0]}, {intervalo[1]}].")
+        return True
+
 
 def verificaDerivadaContinua(funcao, intervalos):
     x = sp.symbols('x')
+
+    # Calcula a derivada da função
     derivada = sp.diff(funcao, x)
     print(f"A derivada da G(X) é: {derivada}")
 
     for intervalo in intervalos:
         print(f"Calculando a continuidade da derivada para o intervalo: [{intervalo[0]},{intervalo[1]}]...")
+        continua = True  # Inicialmente, assumimos que a derivada é contínua no intervalo
+
         for ponto in np.linspace(float(intervalo[0]), float(intervalo[1]), 100):
             limite_esquerda = sp.limit(derivada, x, ponto, dir='-')
             limite_direita = sp.limit(derivada, x, ponto, dir='+')
@@ -46,9 +54,15 @@ def verificaDerivadaContinua(funcao, intervalos):
 
             if limite_esquerda != limite_direita != valor_ponto:
                 print(f"A derivada não é contínua em x = {ponto} no intervalo {intervalo}")
-                return False
+                continua = False  # A derivada não é contínua no intervalo
+                break  # Pode parar de verificar, pois já sabemos que não é contínua
 
-    return True
+        if continua:
+            print(f"A derivada é contínua no intervalo [{intervalo[0]},{intervalo[1]}].")
+        else:
+            print(f"A derivada não é contínua no intervalo [{intervalo[0]},{intervalo[1]}].")
+
+    return continua
 
 
 def verificaDerivadaMenorQueUm(derivada, intervalos):
