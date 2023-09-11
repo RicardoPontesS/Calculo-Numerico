@@ -8,6 +8,7 @@ def retornoFuncao(x):
 def retornoFuncao2(x):
     resultado = (2 * x**3 - 1)/6
     return resultado
+
 def verificaContinuidade(funcao, intervalo):
     x = sp.symbols('x')
 
@@ -28,13 +29,18 @@ def verificaContinuidade(funcao, intervalo):
         print(f"A função é contínua no intervalo [{intervalo[0]}, {intervalo[1]}].")
         return True
 
+
 def verificaDerivadaContinua(funcao, intervalos):
     x = sp.symbols('x')
+
+    # Calcula a derivada da função
     derivada = sp.diff(funcao, x)
     print(f"A derivada da G(X) é: {derivada}")
 
     for intervalo in intervalos:
         print(f"Calculando a continuidade da derivada para o intervalo: [{intervalo[0]},{intervalo[1]}]...")
+        continua = True  # Inicialmente, assumimos que a derivada é contínua no intervalo
+
         for ponto in np.linspace(float(intervalo[0]), float(intervalo[1]), 100):
             limite_esquerda = sp.limit(derivada, x, ponto, dir='-')
             limite_direita = sp.limit(derivada, x, ponto, dir='+')
@@ -42,9 +48,15 @@ def verificaDerivadaContinua(funcao, intervalos):
 
             if limite_esquerda != limite_direita != valor_ponto:
                 print(f"A derivada não é contínua em x = {ponto} no intervalo {intervalo}")
-                return False
+                continua = False  # A derivada não é contínua no intervalo
+                break  # Pode parar de verificar, pois já sabemos que não é contínua
 
-    return True
+        if continua:
+            print(f"A derivada é contínua no intervalo [{intervalo[0]},{intervalo[1]}].")
+        else:
+            print(f"A derivada não é contínua no intervalo [{intervalo[0]},{intervalo[1]}].")
+
+    return continua
 
 
 def verificaDerivadaMenorQueUm(derivada, intervalos):
@@ -88,12 +100,13 @@ def verificaFuncoes(intervalos):
 
 
 def iteracoes(funcao_continua, intervalos):
-
     convergencia = 0
     x = sp.symbols('x')
     epsilon = 0.0000001
 
     for intervalo in intervalos:
+        if(intervalo[0]!=-0.5):
+            continue
         cont = 1
         x0 = (intervalo[0] + intervalo[1]) / 2  # Ponto médio do intervalo
         funcao = funcao_continua
@@ -117,7 +130,6 @@ def iteracoes(funcao_continua, intervalos):
                 convergencia = (xk - raiz) / (xk_anterior - raiz)
                 xk_anterior = xk
                 xk = retornoFuncao2(xk_anterior)
-                cont = cont + 1
                 print(convergencia)
         print("------------------------------------------------------------------------------------")
 
@@ -134,14 +146,14 @@ def verificaIntervalo():
 
     while i < 15:  # Defina o limite superior adequado para a busca de intervalos
         retorno1 = retornoFuncao(i)
-        retorno2 = retornoFuncao(i + 1)
+        retorno2 = retornoFuncao(i + 0.5)
 
         if (retorno1 > 0 and retorno2 < 0) or (retorno1 < 0 and retorno2 > 0):
             comecoIntervalo = i
-            fimIntervalo = i + 1
+            fimIntervalo = i + 0.5
             intervalos.append([comecoIntervalo, fimIntervalo])
 
-        i += 1
+        i += 0.5
     print("------------------------------------------------------------------------------------")
     print("Intervalos onde existe um zero na f(x):")
     for intervalo in intervalos:
@@ -160,7 +172,8 @@ def modificaFuncao():
     x = sp.symbols('x')
 
     equacoes_com_x_isolado = []
-    equacao1 = (2 * x ** 3 - 1) / 6
+    # x = sqrt((6x+1)/2)
+    equacao1 = ((6 * x + 1) / 2) ** (1 / 3)
     equacoes_com_x_isolado.append(equacao1)
 
     for eq in equacoes_com_x_isolado:
@@ -174,8 +187,6 @@ if __name__ == '__main__':
     funcao_continua = verificaFuncoes(intervalos)
 
     if funcao_continua:
-        #if verificaDerivadaContinua(funcao_continua, intervalos):
-            #print("A derivada é contínua em todos os intervalos encontrados.")
         iteracoes(funcao_continua, intervalos)
     else:
         print("\nNenhuma função contínua encontrada.")
