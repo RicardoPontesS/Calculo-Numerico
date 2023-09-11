@@ -6,7 +6,7 @@ def retornoFuncao(x):
     return resultado
 
 def retornoFuncao2(x):
-    resultado = (sp.ln(5*x) - 6*x**3 - 1)/2
+    resultado = (sp.ln(5*x - 6*x**3 + 1))/2
     return resultado
 def verificaContinuidade(funcao, intervalo):
     x = sp.symbols('x')
@@ -93,6 +93,8 @@ def iteracoes(funcao_continua, intervalos):
     epsilon = 0.0000001
 
     for intervalo in intervalos:
+        if(intervalo[0]!=0.3999999999999802):
+            continue
         cont = 1
         x0 = (intervalo[0] + intervalo[1]) / 2  # Ponto médio do intervalo
         funcao = funcao_continua
@@ -103,8 +105,6 @@ def iteracoes(funcao_continua, intervalos):
             xk_anterior = xk
             xk = retornoFuncao2(xk_anterior)
             cont = cont + 1
-            if(cont>=4):
-                break
         raiz = xk
 
         funcao = funcao_continua
@@ -112,6 +112,7 @@ def iteracoes(funcao_continua, intervalos):
         xk_anterior = x0
         print("------------------------------------------------------------------------------------")
         print(f"Raiz encontrada no intervalo [{intervalo[0]}, {intervalo[1]}]: {raiz}")
+        print(f"Quantidade de iterações necessárias: {cont}")
         print("Calculando convergência...")
         cont = 1
         while abs(xk - xk_anterior) > epsilon:
@@ -119,8 +120,6 @@ def iteracoes(funcao_continua, intervalos):
                 xk_anterior = xk
                 xk = retornoFuncao2(xk_anterior)
                 cont = cont + 1
-                if (cont >= 4):
-                    break
                 print(convergencia)
         print("------------------------------------------------------------------------------------")
 
@@ -177,8 +176,6 @@ if __name__ == '__main__':
     funcao_continua = verificaFuncoes(intervalos)
 
     if funcao_continua:
-        #if verificaDerivadaContinua(funcao_continua, intervalos):
-            #print("A derivada é contínua em todos os intervalos encontrados.")
         iteracoes(funcao_continua, intervalos)
     else:
         print("\nNenhuma função contínua encontrada.")
