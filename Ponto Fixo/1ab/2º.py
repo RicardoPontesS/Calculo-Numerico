@@ -111,6 +111,8 @@ def iteracoes(funcao_continua, intervalos):
     epsilon = 0.0000001
 
     for intervalo in intervalos:
+        if(intervalo[0]==-1):
+            continue
         cont = 1
         x0 = (intervalo[0] + intervalo[1]) / 2  # Ponto médio do intervalo
         funcao = funcao_continua
@@ -191,8 +193,6 @@ if __name__ == '__main__':
     funcao_continua = verificaFuncoes(intervalos)
 
     if funcao_continua:
-        #if verificaDerivadaContinua(funcao_continua, intervalos):
-            #print("A derivada é contínua em todos os intervalos encontrados.")
         iteracoes(funcao_continua, intervalos)
     else:
         print("\nNenhuma função contínua encontrada.")
