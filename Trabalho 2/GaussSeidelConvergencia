@@ -1,21 +1,19 @@
 import numpy as np
 
-# Função para verificar a convergência do método de Gauss-Seidel
-def verifica_convergencia_gauss_seidel(A):
-    n = A.shape[0]  # Obtém o tamanho da matriz (número de linhas)
+# Função para verificar o critério de Sassenfeld
+def criterio_sassenfeld(matriz):
+    n = len(matriz)  # Tamanho da matriz
+    betas = np.zeros(n)  # Inicializa um array de betas com zeros
 
-    # Loop através das linhas da matriz
-    for i in range(n):
-        diagonal = abs(A[i, i])  # Obtém o valor absoluto do elemento na diagonal principal
-        soma_abs_outros_elementos = np.sum(np.abs(A[i, :])) - diagonal  # Soma dos valores absolutos dos elementos fora da diagonal
-        print("Diagonal: ",diagonal)
-        print("Soma soma dos valores absolutos: ", soma_abs_outros_elementos)
+    for i in range(n):  # Loop sobre as linhas da matriz
+        soma_absolutos = np.sum(np.abs(matriz[i, :i]))  # Soma dos valores absolutos fora da diagonal principal
+        if matriz[i, i] != 0:  # Verifica se o elemento da diagonal principal não é zero
+            beta = soma_absolutos / np.abs(matriz[i, i])  # Calcula o beta para a linha atual
+            betas[i] = beta  # Armazena o beta calculado
+            if beta >= 1:  # Verifica se o critério de Sassenfeld é violado
+                return False, betas  # Retorna falso se o critério for violado
 
-        # Verifica se o critério das linhas é satisfeito para esta linha
-        if diagonal <= soma_abs_outros_elementos:
-            return False  # Se o critério não for satisfeito, retorna False
-
-    return True  # Se o critério for satisfeito para todas as linhas, retorna True
+    return True, betas  # Retorna verdadeiro se o critério for atendido para todas as linhas
 
 # Matriz A
 A = np.array([[1, 0, 0, 0, 0],
@@ -24,11 +22,13 @@ A = np.array([[1, 0, 0, 0, 0],
               [0, 0, 14, 30, 1],
               [0, 0, 0, 0, 1]])
 
-# Verifica a convergência usando a função
-converge = verifica_convergencia_gauss_seidel(A)
+# Verifica se o método de Gauss-Seidel converge para a matriz A
+converge, betas = criterio_sassenfeld(A)
 
-# Exibe o resultado da verificação
 if converge:
-    print("O método de Gauss-Seidel deve convergir para a matriz A.")
+    print("O método de Gauss-Seidel converge para a matriz.")
+    print("Betas:", betas)  # Imprime os valores de beta para cada linha
 else:
-    print("O método de Gauss-Seidel pode não convergir para a matriz A.")
+    print("O método de Gauss-Seidel não converge para a matriz.")
+    print("Betas:", betas)  # Imprime os valores de beta para cada linha
+
