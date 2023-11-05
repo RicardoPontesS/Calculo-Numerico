@@ -16,7 +16,7 @@ b = np.array([[0],
 max_iter = 100
 
 # Tolerância para convergência
-tolerance = 1e-7
+tolerancia = 1e-7
 
 # Inicialização do vetor de solução
 x = np.zeros_like(b)
@@ -26,7 +26,7 @@ for iteration in range(max_iter):
     x_new = np.zeros_like(x)
     for i in range(len(b)):
         x_new[i] = (b[i] - np.dot(A[i, :i], x[:i]) - np.dot(A[i, i+1:], x[i+1:])) / A[i, i]
-    if np.all(np.abs(x - x_new) < tolerance):
+    if np.all(np.abs(x - x_new) < tolerancia):
         break
     x = x_new
 
