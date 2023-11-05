@@ -8,6 +8,8 @@ def verifica_convergencia_gauss_seidel(A):
     for i in range(n):
         diagonal = abs(A[i, i])  # Obtém o valor absoluto do elemento na diagonal principal
         soma_abs_outros_elementos = np.sum(np.abs(A[i, :])) - diagonal  # Soma dos valores absolutos dos elementos fora da diagonal
+        print("Diaginal: ",diagonal)
+        print("Soma soma dos valores absolutos: ", soma_abs_outros_elementos)
 
         # Verifica se o critério das linhas é satisfeito para esta linha
         if diagonal <= soma_abs_outros_elementos:
