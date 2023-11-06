@@ -11,7 +11,7 @@ def verifica_convergencia_gauss_jacobi(A):
         print("Diagonal: ", diagonal)
         print("Soma soma dos valores absolutos: ", soma_abs_outros_elementos)
         # Verifica se o critério das linhas é satisfeito para esta linha
-        if diagonal <= soma_abs_outros_elementos:
+        if soma_abs_outros_elementos/diagonal > 1:
             return False  # Se o critério não for satisfeito, retorna False
 
     return True  # Se o critério for satisfeito para todas as linhas, retorna True
