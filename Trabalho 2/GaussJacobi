@@ -21,15 +21,13 @@ tolerancia = 1e-7
 # Inicialização do vetor de solução
 x = np.zeros_like(b)
 
-# Iterações do método de Gauss-Jacobi
-for iteration in range(max_iter):
-    x_new = np.zeros_like(x)
+# Iterações do método de Gauss-Seidel
+for iteracao in range(max_iter):
     for i in range(len(b)):
-        x_new[i] = (b[i] - np.dot(A[i, :i], x[:i]) - np.dot(A[i, i+1:], x[i+1:])) / A[i, i]
-    if np.all(np.abs(x - x_new) < tolerancia):
+        x[i] = (b[i] - np.dot(A[i, :i], x[:i]) - np.dot(A[i, i+1:], x[i+1:])) / A[i, i]
+    if np.all(np.abs(np.dot(A, x) - b) < tolerancia):
+        print("Iterações realizadas: ", iteracao)
         break
-    x = x_new
-
 
 print("Solução aproximada:")
 print(x)
