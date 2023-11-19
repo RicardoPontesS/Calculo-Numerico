@@ -7,12 +7,16 @@ def calcula_k1(x, y):
 
 def calcula_k2(x, y):
     k1 = calcula_k1(x, y)
-    k2 = 0.2 * ((y + k1/2) + math.cos(x+0.2/2))
+    xk2 = (x+0.2/2)
+    yk2 = (y+k1/2)
+    k2 = 0.2 * (yk2 + math.cos(xk2))
     return k2
 
 def calcula_k3(x, y):
     k2 = calcula_k2(x, y)
-    k3 = 0.2 * ((y+3/4*k2)+(math.cos(x+3/4*0.2)))
+    xk3 = (x + 3/4 * 0.2)
+    yk3 = (y + 3/4 * k2)
+    k3 = 0.2 * (yk3 + math.cos(xk3))
     return k3
 
 def rungeKutta(x, y):
@@ -25,21 +29,16 @@ def rungeKutta(x, y):
 def main():
     x = 0
     y = 1
-    tolerancia = 0.0001
-    erro = float('inf')
+    num_iteracoes = 3
     valores_rk = []
-    iteracoes = 0
 
-    while erro > tolerancia:
+    for _ in range(num_iteracoes):
         rk = rungeKutta(x, y)
-        erro = np.abs(rk - y)
+        x = x + 0.2
         y = rk
         valores_rk.append(rk)
-        iteracoes += 1
 
-    print("Resultado final:", rk)
-    print("Número de iterações:", iteracoes)
-    print("Valores de Y ao longo da iteração:", valores_rk)
+    print("Resultados nas primeiras 3 iterações:", valores_rk)
 
 if __name__ == "__main__":
     main()
