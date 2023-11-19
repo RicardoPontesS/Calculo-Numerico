@@ -26,7 +26,7 @@ def main():
     y = 1
     tolerancia = 0.0001
     erro = float('inf')
-    valores_rk = [y]
+    valores_rk = []
 
     while erro > tolerancia:
         rk = rungeKutta(x, y)
