@@ -31,14 +31,18 @@ def main():
     y = 1
     num_iteracoes = 3
     valores_rk = []
+    valores_x = []
 
     for _ in range(num_iteracoes):
         rk = rungeKutta(x, y)
         x = x + 0.2
         y = rk
         valores_rk.append(rk)
+        valores_x.append(x)
 
-    print("Resultados nas primeiras 3 iterações:", valores_rk)
+    print("Resultados de X nas primeiras 3 iterações:", valores_x)
+    print("Resultados de Y nas primeiras 3 iterações:", valores_rk)
+
 
 if __name__ == "__main__":
     main()
