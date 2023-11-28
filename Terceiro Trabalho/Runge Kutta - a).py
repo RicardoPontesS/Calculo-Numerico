@@ -1,4 +1,3 @@
-import numpy as np
 
 def calcula_k1(x, y):
     k1 = 0.2 * (2 * x - 3 * y + 1)
@@ -28,7 +27,7 @@ def rungeKutta(x, y):
 def main():
     x = 0
     y = 1
-    num_iteracoes = 6
+    num_iteracoes = 5
     valores_rk = []
     valores_x = []
 
